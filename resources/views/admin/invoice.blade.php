@@ -58,7 +58,7 @@
                                 <address>
                                     <strong>{{$order->firstname. " ".$order->lastname}}</strong><br>
                                     {{$order->address}}<br>
-                                    {{$order->city}}<br>
+                                    {{$order->city.",".$order->country}}<br>
                                     Phone: {{$order->phone}}<br>
                                     Email: {{$order->email}}
                                 </address>
@@ -68,7 +68,7 @@
                                 <b>Invoice #007612</b><br>
                                 <br>
                                 <b>Order ID:</b> {{$order->id}}<br>
-                                <b>Payment Due:</b> 2/22/2014<br>
+                                <b>Payment Due:</b> {{$order->created_at}}<br>
                                 <b>Account:</b> 968-34567
                             </div>
                             <!-- /.col -->
@@ -150,13 +150,47 @@
                         <!-- this row will not appear when printing -->
                         <div class="row no-print">
                             <div class="col-12">
-                                <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>
-                                <button type="button" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Submit
-                                    Payment
-                                </button>
-                                <button type="button" class="btn btn-primary float-right" style="margin-right: 5px;">
-                                    <i class="fas fa-download"></i> Generate PDF
-                                </button>
+                                <b>
+                                    @switch($order->status)
+                                        @case(0)<span class="text text-dark">Pending</span>@break
+                                        @case(1)<span class="text text-blue">Confirmed</span>@break
+                                        @case(2)<span class="text text-warning">Shipping</span>@break
+                                        @case(3)<span class="text text-warning">Shipped</span>@break
+                                        @case(4)<span class="text text-success">Completed</span>@break
+                                        @case(5)<span class="text text-warning">Cancel</span>@break
+                                    @endswitch
+                                </b>
+                                @switch($order->status)
+                                    @case(0)
+                                        <a href="{{url("/admin/invoice/confirm",["orders"=>$order->id])}}" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Submit
+                                            Confirm
+                                        </a>
+                                        <a href="{{url("/admin/invoice/cancel",["orders"=>$order->id])}}" class="btn btn-danger float-right"><i class="far fa-credit-card"></i> Submit
+                                            Cancel
+                                        </a>
+                                        @break
+                                    @case(1)
+                                        <a href="#" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Submit
+                                            Shipping
+                                        </a>
+                                        @break
+                                    @case(2)
+                                        <a href="#" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Submit
+                                            Shipped
+                                        </a>
+                                        @break
+                                    @case(3)
+                                        <a href="#" class="btn btn-success float-right"><i class="far fa-credit-card"></i> Submit
+                                            Complete
+                                        </a>
+                                        @break
+                                    @case(4)
+
+                                        @break
+                                    @case(5)
+
+                                        @break
+                                @endswitch
                             </div>
                         </div>
                     </div>

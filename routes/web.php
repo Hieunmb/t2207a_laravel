@@ -28,10 +28,12 @@ Route::get('success-transaction,{order}', [\App\Http\Controllers\WebController::
 Route::get('cancel-transaction,{order}', [\App\Http\Controllers\WebController::class, 'cancelTransaction'])->name('cancelTransaction');
 Route::get('/add-to-favourite/{product}', [\App\Http\Controllers\WebController::class, "addToFavourite"]);
 Route::get('/favourite', [\App\Http\Controllers\WebController::class, "favourite"]);
-Route::prefix("/admin")->middleware(["auth"])->group(function (){
+Route::prefix("/admin")->middleware(["auth","admin"])->group(function (){
     Route::get("/",[\App\Http\Controllers\AdminController::class,"dashboard"]);
     Route::get("/orders",[\App\Http\Controllers\AdminController::class,"orders"]);
     Route::get("/invoice/{order}",[\App\Http\Controllers\AdminController::class,"invoice"]);
+    Route::get("/invoice/confirm/{order}",[\App\Http\Controllers\AdminController::class,"confirm"]);
+    Route::get("/invoice/cancel/{order}",[\App\Http\Controllers\AdminController::class,"cancel"]);
 });
 //Route::get("/admin",[\App\Http\Controllers\AdminController::class,"dashboard"])->middleware(["auth"]);
 //Route::get("/admin/orders",[\App\Http\Controllers\AdminController::class,"orders"])->middleware(["auth"]);
